@@ -4,7 +4,7 @@ import { mutate } from 'swr';
 
 import { Td } from './Table';
 import { useAuth } from '@/lib/auth';
-import { updateFeedback } from '@/lib/db';
+// import { updateFeedback } from '@/lib/db';
 import DeleteFeedbackButton from './DeleteFeedbackButton';
 
 const FeedbackRow = ({ id, author, text, route, status }) => {
@@ -12,8 +12,9 @@ const FeedbackRow = ({ id, author, text, route, status }) => {
   const isChecked = status === 'active';
 
   const toggleFeedback = async () => {
-    await updateFeedback(id, { status: isChecked ? 'pending' : 'active' });
-    mutate(['/api/feedback', auth.user.token]);
+    // await updateFeedback(id, { status: isChecked ? 'pending' : 'active' });
+    // mutate(['/api/feedback', auth.user.token]);
+    console.log('Asd');
   };
 
   return (
