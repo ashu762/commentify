@@ -1,19 +1,6 @@
 import React from 'react';
 import NextLink from 'next/link';
-import {
-  Flex,
-  Link,
-  Stack,
-  Avatar,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Heading,
-  Box,
-  Text,
-  Button,
-  Icon
-} from '@chakra-ui/core';
+import { Flex, Link, Stack, Avatar, Button, Icon } from '@chakra-ui/core';
 import { useAuth } from '@/lib/auth';
 import AddSiteModal from './AddSiteModal';
 
@@ -28,14 +15,13 @@ const DashboardShell = ({ children }) => {
         py={4}
         px={8}
         width="full"
-        maxWidth="1250px"
         alignItems="center"
       >
         <Stack spacing={4} isInline align="center">
           <NextLink href="/" passHref>
             <Icon name="logo" color="black" size="24px" align="center" mr={6} />
           </NextLink>
-          <NextLink href="/dashboard" passHref>
+          <NextLink href="/sites" passHref>
             <Link mr={6}>Sites</Link>
           </NextLink>
           <NextLink href="/feedback" passHref>

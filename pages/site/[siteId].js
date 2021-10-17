@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
-import Feedback from '@/components/Feedback';
-import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/router';
 import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/core';
+
 import { getAllFeedback, getAllSites } from 'lib/db-admin';
 import { createFeedback } from '@/lib/db';
+import Feedback from '@/components/Feedback';
+import { useAuth } from '@/lib/auth';
+import DashboardShell from '@/components/DashboardShell';
 
 export async function getStaticProps(context) {
   const siteId = context.params.siteId;
@@ -28,7 +30,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false
+    fallback: true
   };
 }
 
@@ -37,6 +39,7 @@ function SiteFeedback({ initialFeedback }) {
   const inputRef = useRef(null);
   const auth = useAuth();
   const [allFeedback, setAllFeedback] = useState(initialFeedback);
+
   const onSubmit = (e) => {
     e.preventDefault();
     const newFeedback = {
@@ -48,32 +51,35 @@ function SiteFeedback({ initialFeedback }) {
       provider: auth.user.provider,
       status: 'pending'
     };
+    inputRef.current.value = '';
     setAllFeedback([newFeedback, ...allFeedback]);
     createFeedback(newFeedback);
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      width="full"
-      maxWidth="700px"
-      margin="0 auto"
-    >
-      <Box as="form" onSubmit={onSubmit}>
-        <FormControl id="email" my={8}>
-          <FormLabel>Comment</FormLabel>
-          <Input type="comment" ref={inputRef} />
-          <Button fontWeight="medium" type="submit" mt={2}>
-            Add Comment
-          </Button>
-        </FormControl>
-      </Box>
+    <DashboardShell>
+      <Box
+        display="flex"
+        flexDirection="column"
+        width="full"
+        maxWidth="700px"
+        margin="0 auto"
+      >
+        <Box as="form" onSubmit={onSubmit}>
+          <FormControl id="email" my={8}>
+            <FormLabel>Comment</FormLabel>
+            <Input type="comment" ref={inputRef} />
+            <Button fontWeight="medium" type="submit" mt={2}>
+              Add Comment
+            </Button>
+          </FormControl>
+        </Box>
 
-      {allFeedback.map((feedback) => {
-        return <Feedback key={feedback.id} {...feedback} />;
-      })}
-    </Box>
+        {allFeedback.map((feedback) => {
+          return <Feedback key={feedback.id} {...feedback} />;
+        })}
+      </Box>
+    </DashboardShell>
   );
 }
 
