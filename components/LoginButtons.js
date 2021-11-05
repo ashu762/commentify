@@ -8,7 +8,7 @@ const LoginButtons = () => {
   return (
     <Flex direction={['column', 'row']}>
       <Button
-        onClick={() => auth.signinWithGitHub()}
+        onClick={() => auth.signInWithGitHub()}
         backgroundColor="gray.900"
         color="white"
         fontWeight="medium"
@@ -24,7 +24,7 @@ const LoginButtons = () => {
         Continue with GitHub
       </Button>
       <Button
-        onClick={() => auth.signinWithGoogle()}
+        onClick={() => auth.signInWithGoogle()}
         backgroundColor="white"
         color="gray.900"
         variant="outline"

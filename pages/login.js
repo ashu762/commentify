@@ -28,7 +28,7 @@ const Login = () => {
           </Box>
         </Flex>
         <Button
-          onClick={() => auth.signinWithGitHub('/sites')}
+          onClick={() => auth.signInWithGitHub('/sites')}
           backgroundColor="gray.900"
           color="white"
           fontWeight="medium"
@@ -44,7 +44,7 @@ const Login = () => {
           Continue with GitHub
         </Button>
         <Button
-          onClick={() => auth.signinWithGoogle('/sites')}
+          onClick={() => auth.signInWithGoogle('/sites')}
           backgroundColor="white"
           color="gray.900"
           variant="outline"
