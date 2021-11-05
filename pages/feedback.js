@@ -1,26 +1,23 @@
 import useSWR from 'swr';
 
 import { useAuth } from '@/lib/auth';
-import EmptyState from '@/components/EmptyState';
-import SiteTableSkeleton from '@/components/SiteTableSkeleton';
+import fetcher from '@/utils/fetcher';
+import Page from '@/components/Page';
 import DashboardShell from '@/components/DashboardShell';
-import fetcher from 'utils/fetcher';
-import SiteTable from '@/components/SiteTable';
-import FeedbackTableHeader from '@/components/FeedbackTableHeader';
 import FeedbackTable from '@/components/FeedbackTable';
+import FeedbackEmptyState from '@/components/FeedbackEmptyState';
+import FeedbackTableHeader from '@/components/FeedbackTableHeader';
+import FeedbackTableSkeleton from '@/components/FeedbackTableSkeleton';
 
-export default function MyFeedback() {
+const AllFeedback = () => {
   const { user } = useAuth();
-  const { data } = useSWR(
-    user ? ['/api/feedback', user?.token] : null,
-    fetcher
-  );
+  const { data } = useSWR(user ? ['/api/feedback', user.token] : null, fetcher);
 
   if (!data) {
     return (
       <DashboardShell>
         <FeedbackTableHeader />
-        <SiteTableSkeleton />
+        <FeedbackTableSkeleton />
       </DashboardShell>
     );
   }
@@ -28,11 +25,19 @@ export default function MyFeedback() {
   return (
     <DashboardShell>
       <FeedbackTableHeader />
-      {data?.feedback?.length > 0 ? (
+      {data?.feedback?.length ? (
         <FeedbackTable feedback={data.feedback} />
       ) : (
-        <EmptyState />
+        <FeedbackEmptyState />
       )}
     </DashboardShell>
   );
-}
+};
+
+const AllFeedbackPage = () => (
+  <Page name="All Feedback" path="/feedback">
+    <AllFeedback />
+  </Page>
+);
+
+export default AllFeedbackPage;

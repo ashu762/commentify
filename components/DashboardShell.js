@@ -3,7 +3,6 @@ import NextLink from 'next/link';
 import { Box, Button, Flex, Link, Avatar, Icon } from '@chakra-ui/core';
 
 import { useAuth } from '@/lib/auth';
-import Footer from './Footer';
 
 const DashboardShell = ({ children }) => {
   const { user } = useAuth();
@@ -52,7 +51,6 @@ const DashboardShell = ({ children }) => {
       <Flex margin="0 auto" direction="column" maxW="1250px" px={[0, 8, 8]}>
         {children}
       </Flex>
-      <Footer />
     </Box>
   );
 };

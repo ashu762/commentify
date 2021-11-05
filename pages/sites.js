@@ -1,16 +1,17 @@
 import useSWR from 'swr';
 
 import { useAuth } from '@/lib/auth';
-import EmptyState from '@/components/EmptyState';
-import SiteTableSkeleton from '@/components/SiteTableSkeleton';
+import fetcher from '@/utils/fetcher';
+import Page from '@/components/Page';
 import DashboardShell from '@/components/DashboardShell';
-import fetcher from 'utils/fetcher';
 import SiteTable from '@/components/SiteTable';
+import SiteEmptyState from '@/components/SiteEmptyState';
 import SiteTableHeader from '@/components/SiteTableHeader';
+import SiteTableSkeleton from '@/components/SiteTableSkeleton';
 
-export default function Dashboard() {
+const Dashboard = () => {
   const { user } = useAuth();
-  const { data } = useSWR(user ? ['/api/sites', user?.token] : null, fetcher);
+  const { data } = useSWR(user ? ['/api/sites', user.token] : null, fetcher);
 
   if (!data) {
     return (
@@ -21,14 +22,27 @@ export default function Dashboard() {
     );
   }
 
+  if (data.sites.length) {
+    return (
+      <DashboardShell>
+        <SiteTableHeader />
+        <SiteTable sites={data.sites} />
+      </DashboardShell>
+    );
+  }
+
   return (
     <DashboardShell>
       <SiteTableHeader />
-      {data?.sites?.length > 0 ? (
-        <SiteTable sites={data.sites} />
-      ) : (
-        <EmptyState />
-      )}
+      {<SiteEmptyState />}
     </DashboardShell>
   );
-}
+};
+
+const DashboardPage = () => (
+  <Page name="Dashboard" path="/sites">
+    <Dashboard />
+  </Page>
+);
+
+export default DashboardPage;

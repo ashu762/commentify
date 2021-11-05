@@ -2,21 +2,18 @@ import React from 'react';
 import { NextSeo } from 'next-seo';
 
 const Page = ({ name, path, children }) => {
-  const title = `Fast Feedback – ${name}`;
-  const url = `https://fastfeedback.io${path}`;
+  const title = `Commentify – ${name}`;
 
   return (
-   <>
-    <NextSeo
-      title={title}
-      canonical={url}
-      openGraph={{
-        url,
-        title
-      }}
-    />
-    {children}
-   </>
+    <>
+      <NextSeo
+        title={title}
+        openGraph={{
+          title
+        }}
+      />
+      {children}
+    </>
   );
 };
 
