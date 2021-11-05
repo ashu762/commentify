@@ -9,20 +9,16 @@ import DeleteFeedbackButton from './DeleteFeedbackButton';
 
 const FeedbackRow = ({ id, author, text, route, status }) => {
   const auth = useAuth();
-
   const isChecked = status === 'active';
-  const [checked, setChecked] = useState(isChecked);
 
   const toggleFeedback = async () => {
-    setChecked(!checked);
-    await updateFeedback(id, { status: checked ? 'pending' : 'active' });
-
+    await updateFeedback(id, { status: isChecked ? 'pending' : 'active' });
     mutate(['/api/feedback', auth.user.token]);
   };
 
   return (
     <Box as="tr" key={id}>
-      <Td fontWeight="medium">{author || 'Anynomous'}</Td>
+      <Td fontWeight="medium">{author}</Td>
       <Td>{text}</Td>
       <Td>
         <Code
@@ -36,7 +32,7 @@ const FeedbackRow = ({ id, author, text, route, status }) => {
         </Code>
       </Td>
       <Td>
-        <Switch color="green" onChange={toggleFeedback} isChecked={checked} />
+        <Switch color="green" onChange={toggleFeedback} isChecked={isChecked} />
       </Td>
       <Td>
         <DeleteFeedbackButton feedbackId={id} />
