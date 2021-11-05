@@ -1,8 +1,5 @@
-import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import useSWR, { mutate } from 'swr';
-
-import { Button, FormControl, FormLabel, Input } from '@chakra-ui/core';
+import { mutate } from 'swr';
 import {
   Modal,
   ModalOverlay,
@@ -11,45 +8,51 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
-  useToast
+  FormControl,
+  FormLabel,
+  Button,
+  Input,
+  useToast,
+  useDisclosure
 } from '@chakra-ui/core';
+
 import { createSite } from '@/lib/db';
 import { useAuth } from '@/lib/auth';
-import fetcher from 'utils/fetcher';
 
-function AddSiteModal({ children }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const auth = useAuth();
-  const initialRef = useRef();
+const AddSiteModal = ({ children }) => {
   const toast = useToast();
+  const auth = useAuth();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { handleSubmit, register } = useForm();
 
   const onCreateSite = ({ name, url }) => {
     const newSite = {
-      authorId: auth?.user?.uid,
+      authorId: auth.user.uid,
       createdAt: new Date().toISOString(),
       name,
-      url
+      url,
+      settings: {
+        icons: true,
+        timestamp: true,
+        ratings: false
+      }
     };
 
     const { id } = createSite(newSite);
     toast({
-      title: 'Success',
-      description: "We've added your site",
+      title: 'Success!',
+      description: "We've added your site.",
       status: 'success',
-      duration: 4000,
+      duration: 5000,
       isClosable: true
     });
-
     mutate(
-      ['/api/sites', auth?.user?.token],
-      async (data) => {
-        return { sites: [{ id, ...newSite }, ...data?.sites] };
-      },
+      ['/api/sites', auth.user.token],
+      async (data) => ({
+        sites: [{ id, ...newSite }, ...data.sites]
+      }),
       false
     );
-
     onClose();
   };
 
@@ -69,8 +72,7 @@ function AddSiteModal({ children }) {
       >
         {children}
       </Button>
-
-      <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onCreateSite)}>
           <ModalHeader fontWeight="bold">Add Site</ModalHeader>
@@ -79,11 +81,11 @@ function AddSiteModal({ children }) {
             <FormControl>
               <FormLabel>Name</FormLabel>
               <Input
+                id="site-input"
+                placeholder="My site"
                 name="name"
-                autoComplete="off"
-                placeholder="My Site"
                 ref={register({
-                  required: true
+                  required: 'Required'
                 })}
               />
             </FormControl>
@@ -91,11 +93,11 @@ function AddSiteModal({ children }) {
             <FormControl mt={4}>
               <FormLabel>Link</FormLabel>
               <Input
-                name="url"
-                autoComplete="off"
+                id="link-input"
                 placeholder="https://website.com"
+                name="url"
                 ref={register({
-                  required: true
+                  required: 'Required'
                 })}
               />
             </FormControl>
@@ -105,7 +107,13 @@ function AddSiteModal({ children }) {
             <Button onClick={onClose} mr={3} fontWeight="medium">
               Cancel
             </Button>
-            <Button variantColor="teal" fontWeight="medium" type="submit">
+            <Button
+              id="create-site-button"
+              backgroundColor="#99FFFE"
+              color="#194D4C"
+              fontWeight="medium"
+              type="submit"
+            >
               Create
             </Button>
           </ModalFooter>
@@ -113,6 +121,6 @@ function AddSiteModal({ children }) {
       </Modal>
     </>
   );
-}
+};
 
 export default AddSiteModal;

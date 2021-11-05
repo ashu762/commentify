@@ -1,55 +1,59 @@
 import React from 'react';
 import NextLink from 'next/link';
-import { Flex, Link, Stack, Avatar, Button, Icon } from '@chakra-ui/core';
+import { Box, Button, Flex, Link, Avatar, Icon } from '@chakra-ui/core';
+
 import { useAuth } from '@/lib/auth';
-import AddSiteModal from './AddSiteModal';
+import Footer from './Footer';
 
 const DashboardShell = ({ children }) => {
-  const auth = useAuth();
+  const { user } = useAuth();
 
   return (
-    <Flex flexDirection="column">
+    <Box backgroundColor="gray.100" h="100vh">
       <Flex
-        justifyContent="space-between"
         backgroundColor="white"
-        py={4}
-        px={8}
-        width="full"
-        alignItems="center"
+        mb={[8, 16]}
+        w="full"
+        borderTop="5px solid #0AF5F4"
       >
-        <Stack spacing={4} isInline align="center">
-          <NextLink href="/" passHref>
-            <Icon name="logo" color="black" size="24px" align="center" mr={6} />
-          </NextLink>
-          <NextLink href="/sites" passHref>
-            <Link mr={6}>Sites</Link>
-          </NextLink>
-          <NextLink href="/feedback" passHref>
-            <Link>Feedback</Link>
-          </NextLink>
-        </Stack>
-        <Flex alignItems="center">
-          {auth?.user && (
-            <Button variant="ghost" onClick={() => auth.signout()}>
-              Log Out
-            </Button>
-          )}
-          <Avatar size="sm" ml={4} src={auth?.user?.photoUrl} />
-        </Flex>
-      </Flex>
-      <Flex backgroundColor="gray.100" height="calc(100vh - 64px)">
         <Flex
-          flexDirection="column"
-          maxWidth="1150px"
-          width="100%"
-          ml="auto"
-          mr="auto"
-          p={8}
+          alignItems="center"
+          justifyContent="space-between"
+          pt={4}
+          pb={4}
+          maxW="1250px"
+          margin="0 auto"
+          w="full"
+          px={8}
+          h="60px"
         >
-          {children}
+          <Flex align="center">
+            <NextLink href="/" passHref>
+              <Link>
+                <Icon name="logo" size="24px" mr={8} />
+              </Link>
+            </NextLink>
+            <NextLink href="/sites" passHref>
+              <Link mr={4}>Sites</Link>
+            </NextLink>
+            <NextLink href="/feedback" passHref>
+              <Link>Feedback</Link>
+            </NextLink>
+          </Flex>
+          <Flex justifyContent="center" alignItems="center">
+            <NextLink href="/account" passHref>
+              <Link>
+                <Avatar size="sm" src={user?.photoUrl} />
+              </Link>
+            </NextLink>
+          </Flex>
         </Flex>
       </Flex>
-    </Flex>
+      <Flex margin="0 auto" direction="column" maxW="1250px" px={[0, 8, 8]}>
+        {children}
+      </Flex>
+      <Footer />
+    </Box>
   );
 };
 
